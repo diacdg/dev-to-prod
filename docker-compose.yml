@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  web:
+    network_mode: "bridge"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "4"
+    ports:
+      - "80:80"
+    depends_on:
+      - dev-www
+    links:
+      - dev-www
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+  dev-www:
+    network_mode: "bridge"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "4"
+    build:
+      context: .
+      dockerfile: ./docker/php-fpm/Dockerfile
+    command: sh -c 'chown -R www-data vendor && su - www-data -s /bin/bash -c "php composer.phar install --no-interaction" && php-fpm'
+    #volumes:
+      #- ./vendor:/var/www/vendor:cached
+      #- .:/var/www:delegated
