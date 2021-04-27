@@ -8,5 +8,7 @@ interface UploadedFileInterface
 
     public function getFilename(): string;
 
+    public function getClientOriginalName(): string;
+
     public function move(string $directory, string $name = null): void;
 }

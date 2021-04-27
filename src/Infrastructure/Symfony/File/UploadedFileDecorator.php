@@ -25,6 +25,11 @@ class UploadedFileDecorator implements UploadedFileInterface
         return $this->uploadedFile->getFilename();
     }
 
+    public function getClientOriginalName(): string
+    {
+        return $this->uploadedFile->getClientOriginalName();
+    }
+
     public function move(string $directory, string $name = null): void
     {
         $this->uploadedFile->move($directory, $name);

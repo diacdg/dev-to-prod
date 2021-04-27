@@ -28,6 +28,6 @@ services:
       context: .
       dockerfile: ./docker/php-fpm/Dockerfile
     command: sh -c 'chown -R www-data vendor && su - www-data -s /bin/bash -c "php composer.phar install --no-interaction" && php-fpm'
-    #volumes:
-      #- ./vendor:/var/www/vendor:cached
-      #- .:/var/www:delegated
+    volumes:
+      - ./vendor:/var/www/vendor:cached
+      - .:/var/www:delegated

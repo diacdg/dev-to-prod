@@ -1,0 +1,17 @@
+default:
+  suites:
+    default:
+      contexts:
+        - Behat\MinkExtension\Context\MinkContext
+        - Behatch\Context\RestContext
+        - Behatch\Context\JsonContext
+  extensions:
+    Behatch\Extension: ~
+    FriendsOfBehat\SymfonyExtension:
+        bootstrap: 'config/behat/bootstrap.php'
+    Behat\MinkExtension:
+      files_path: features/attachment
+      base_url: http://localhost:8000/
+      sessions:
+        default:
+          symfony: ~

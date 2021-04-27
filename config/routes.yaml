@@ -1,3 +1,9 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+#upload:
+#    path: /file
+#    methods:
+#      - POST
+#    controller: App\Infrastructure\Symfony\Controller\FileController::uploadAction
