@@ -2,13 +2,29 @@
 
 namespace App\Domain\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity()
+ */
 class File
 {
-    private $id;
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer", options={"unsigned": true})
+     */
+    private int $id;
 
-    private $name;
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $name;
 
-    private $path;
+    /**
+     * @ORM\Column(type="string", length=500)
+     */
+    private string $path;
 
     public function getId(): int
     {

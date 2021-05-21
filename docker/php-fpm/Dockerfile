@@ -1,25 +1,30 @@
 ARG VERSION
 ARG COMPOSER_NO_DEV
 
-FROM php:${VERSION:-7.4}-fpm as www
+FROM php:${VERSION:-8.0.6}-fpm as www
 
 WORKDIR /var/www
 
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y git && \
-    apt-get install -y zip unzip zlib1g-dev libicu-dev g++ librabbitmq-dev libssh-dev && \
-    pecl install amqp
+    apt-get install -y zip unzip zlib1g-dev libicu-dev g++ librabbitmq-dev libssh-dev # && \
+#    pecl install amqp
 
 RUN docker-php-ext-install mysqli && \
     docker-php-ext-install pdo_mysql &&\
     docker-php-ext-install sockets &&\
     docker-php-ext-configure intl &&\
     docker-php-ext-install intl &&\
-    docker-php-ext-install bcmath &&\
-    docker-php-ext-enable amqp
+    docker-php-ext-install bcmath
+
+#    docker-php-ext-enable amqp
 
 # COPY ./docker/php-fpm/prod/www.conf /usr/local/etc/php-fpm.d/www.conf
+
+RUN echo "php-docker"
+RUN mkdir .composer
+RUN chmod 777 .composer
 
 COPY . .
 

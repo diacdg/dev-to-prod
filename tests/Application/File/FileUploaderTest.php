@@ -2,18 +2,20 @@
 
 namespace App\Tests\Application\File;
 
-use App\Application\File\FileCreator;
+use App\Application\File\FileUploader;
 use App\Domain\File\UploadedFileInterface;
 use App\Domain\Manager\EntityManagerInterface;
 use App\Infrastructure\Symfony\File\UploadedFileDecorator;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-class FileManagerTest extends TestCase
+class FileUploaderTest extends TestCase
 {
 
     public function testSaveFile()
     {
+        $uploadPath = "test/upload/dir";
+
         $entityManager = $this->createEntityManagerMock();
         $entityManager->expects($this->once())
             ->method('flush');
@@ -21,25 +23,26 @@ class FileManagerTest extends TestCase
             ->method('persist');
 
         $uploadedFile = $this->createUploadedFile();
-        $fileCreator = new FileCreator($entityManager);
+        $fileCreator = new FileUploader($entityManager, $uploadPath);
 
         $file = $fileCreator->saveFile($uploadedFile);
 
-        $this->assertEquals($file->getPath(), 'var/upload/test.txt');
-        $this->assertEquals($file->getName(), 'test');
+        $this->assertEquals($file->getPath(), $uploadPath . '/test-name');
+        $this->assertEquals($file->getName(), 'test-original-name');
     }
 
     private function createUploadedFile(): UploadedFileInterface
     {
         $uploadedFileMock = $this->createMock(UploadedFile::class);
 
-        $uploadedFileMock->expects($this->any())
-            ->method('getPath')
+        $uploadedFileMock->method('getPath')
             ->willReturn('var/upload/test.txt');
 
-        $uploadedFileMock->expects($this->any())
-            ->method('getFilename')
-            ->willReturn('test');
+        $uploadedFileMock->method('getFilename')
+            ->willReturn('test-name');
+
+        $uploadedFileMock->method('getClientOriginalName')
+            ->willReturn('test-original-name');
 
         $uploadedFileMock->expects($this->once())
             ->method('move');
